@@ -111,11 +111,14 @@ class NerualNetworkDome():
 
         # network structure
         in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
-        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim, bias=True)
-        out_lay = nn.Linear(self.h_dim, self.out_dim, bias=True)
+        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 20, bias=True)
+        hid_lay_2 = nn.Linear(self.h_dim * 20, self.h_dim * 20, bias=True)
+        out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
         self.net = nn.Sequential(in_lay,
                                  nn.Sigmoid(),
                                  hid_lay,
+                                 nn.LeakyReLU(),
+                                 hid_lay_2,
                                  nn.LeakyReLU(),
                                  out_lay)
 
@@ -127,7 +130,7 @@ class NerualNetworkDome():
 
         # print network architecture
         print_network('demo', self.net)
-        print_net_parameters(self.net, {}, title='Initialization parameters')
+        print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
 
     def forward(self, X):
         o1 = self.net(X)
@@ -139,9 +142,11 @@ class NerualNetworkDome():
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
         train_loader = Data.DataLoader(train_set, 50, shuffle=True, num_workers=4)
         param_order_dict = OrderedDict()
+        ith_layer_out_dict = OrderedDict()
 
         loss_lst = []
-        for epoch in range(20):
+        epochs = 10
+        for epoch in range(epochs):
             for i, (b_x, b_y) in enumerate(train_loader):
                 b_x = b_x.view([b_x.shape[0], -1]).float()
                 b_y = b_y.view(b_y.shape[0], 1).float()
@@ -149,14 +154,14 @@ class NerualNetworkDome():
                 self.optim.zero_grad()
                 b_y_preds = self.forward(b_x)
                 loss = self.criterion(b_y_preds, b_y)
-                print(i, loss.data)
+                print('%d/%d, batch_ith = %d, loss=%f' % (epoch, epochs, i, loss.data))
                 loss.backward()
                 self.optim.step()
 
                 loss_lst.append(loss.data)
                 # for idx, param in enumerate(self.net.parameters()):
                 for name, param in self.net.named_parameters():
-                    print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
+                    # print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
                     if name not in param_order_dict.keys():
                         param_order_dict[name] = [copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1)))]
                     else:
@@ -165,7 +170,7 @@ class NerualNetworkDome():
         print_net_parameters(self.net, param_order_dict,
                              title='All parameters (weights and bias) from \n begin to finish in training process phase.')
 
-        print_net_parameters(self.net, {}, title='Final parameters')
+        print_net_parameters(self.net, OrderedDict(), title='Final parameters')
 
         # param_lst = np.asarray(param_lst, dtype=float)
         # print(param_lst)
@@ -173,11 +178,11 @@ class NerualNetworkDome():
         # show_figures(loss_lst, loss_lst)
 
 
-def print_net_parameters(net, param_order_dict={}, title=''):
-    num_figs = 5 // 2 + 1
-    print('num_figs:', num_figs)
+def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
+    num_figs = len(net) // 2 + 1
+    print('subplots:(%dx%d):' % (num_figs, num_figs))
     j = 1
-
+    print(title)
     if param_order_dict == {}:
         # for idx, param in enumerate(self.net.parameters()):
         for name, param in net.named_parameters():
@@ -193,8 +198,9 @@ def print_net_parameters(net, param_order_dict={}, title=''):
     for ith, (name, param) in enumerate(net.named_parameters()):
         # dynamic_plot(param_order_dict[name])
         plt.subplot(num_figs, 2, j)
-        print('j:', j)
-        histogram(np.reshape(np.asarray(param_order_dict[name], dtype=float), (-1, 1)), num_bins=10, title=name,
+        print('subplot_%dth' % j)
+        num_bins = 10
+        histogram(np.reshape(np.asarray(param_order_dict[name], dtype=float), (-1, 1)), num_bins=num_bins, title=name,
                   x_label='Values', y_label='Frequency')
         j += 1
 
