@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+r"""
+
+"""
 
 import copy
 from collections import OrderedDict
@@ -107,8 +110,8 @@ class NerualNetworkDome():
         self.out_dim = 1
 
         # network structure
-        in_lay = nn.Linear(self.in_dim, self.h_dim * 2, bias=True)  # class initialization
-        hid_lay = nn.Linear(self.h_dim * 2, self.h_dim, bias=True)
+        in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
+        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim, bias=True)
         out_lay = nn.Linear(self.h_dim, self.out_dim, bias=True)
         self.net = nn.Sequential(in_lay,
                                  nn.Sigmoid(),
@@ -124,6 +127,7 @@ class NerualNetworkDome():
 
         # print network architecture
         print_network('demo', self.net)
+        print_net_parameters(self.net, {}, title='Initialization parameters')
 
     def forward(self, X):
         o1 = self.net(X)
@@ -135,6 +139,7 @@ class NerualNetworkDome():
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
         train_loader = Data.DataLoader(train_set, 50, shuffle=True, num_workers=4)
         param_order_dict = OrderedDict()
+
         loss_lst = []
         for epoch in range(20):
             for i, (b_x, b_y) in enumerate(train_loader):
@@ -156,25 +161,11 @@ class NerualNetworkDome():
                         param_order_dict[name] = [copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1)))]
                     else:
                         param_order_dict[name].append(copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1))))
-                    # if len(param.data.shape) == 1:  # bias
-                    #     continue
-                    # param_lst.append([copy.deepcopy(param.data[0][0]), copy.deepcopy(param.data[0][1])])
-                # for idx, modu in enumerate(self.net.modules()):
-                #     if idx == 0:
-                #         print(idx, modu)   # net architecture
-                #     else:
-                #         print(idx, modu, modu.weight, modu.bias)
 
-        num_figs = 5 // 2 + 1
-        print('num_figs:', num_figs)
-        j = 1
-        for ith, (name, param) in enumerate(self.net.named_parameters()):
-            # dynamic_plot(param_order_dict[name])
-            plt.subplot(num_figs, num_figs, j)
-            print('j:', j)
-            histogram(np.reshape(np.asarray(param_order_dict[name], dtype=float), (-1, 1)), num_bins=5, title=name)
-            j += 1
-        plt.show()
+        print_net_parameters(self.net, param_order_dict,
+                             title='All parameters (weights and bias) from \n begin to finish in training process phase.')
+
+        print_net_parameters(self.net, {}, title='Final parameters')
 
         # param_lst = np.asarray(param_lst, dtype=float)
         # print(param_lst)
@@ -182,10 +173,42 @@ class NerualNetworkDome():
         # show_figures(loss_lst, loss_lst)
 
 
-def histogram(x, num_bins=5, title='histogram', ith=0):
+def print_net_parameters(net, param_order_dict={}, title=''):
+    num_figs = 5 // 2 + 1
+    print('num_figs:', num_figs)
+    j = 1
+
+    if param_order_dict == {}:
+        # for idx, param in enumerate(self.net.parameters()):
+        for name, param in net.named_parameters():
+            print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
+            if name not in param_order_dict.keys():
+                param_order_dict[name] = [copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1)))]
+            else:
+                param_order_dict[name].append(copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1))))
+
+    # fig = plt.subplots()
+    # fig.suptitle(title)
+    plt.suptitle(title, fontsize=8)
+    for ith, (name, param) in enumerate(net.named_parameters()):
+        # dynamic_plot(param_order_dict[name])
+        plt.subplot(num_figs, 2, j)
+        print('j:', j)
+        histogram(np.reshape(np.asarray(param_order_dict[name], dtype=float), (-1, 1)), num_bins=10, title=name,
+                  x_label='Values', y_label='Frequency')
+        j += 1
+
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.88)
+    plt.show()
+
+
+def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Frequency'):
     # x = [21, 22, 23, 4, 5, 6, 77, 8, 9, 10, 31, 32, 33, 34, 35, 36, 37, 18, 49, 50, 100]
     # num_bins = 5
     n, bins, patches = plt.hist(x, num_bins, facecolor='blue', alpha=0.5)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
     plt.title(title)
 
 
