@@ -130,7 +130,7 @@ class NeuralNetworkDemo():
         self.h_dim = 1
         self.out_dim = 1
 
-        # method 1: network structure (not recommend)
+        # method 1: network structure (recommend), however it is not easy to print values in each layer
         in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
         hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
         hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
@@ -159,12 +159,32 @@ class NeuralNetworkDemo():
                                  PrintLayer(idx_layer='out'),  # Add Print layer for debug
                                  )
 
-        # method 2 : recommend
-        self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
-        self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
-        self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
-        self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
+        # method 2 : it is not easy to use , however it is easy to print values in each layer.
+        class NN(nn.Module):
+            def __init__(self, in_dim, h_dim, out_dim):
+                super(NN, self).__init__()
+                self.in_dim = in_dim
+                self.h_dim = h_dim
+                self.out_dim = out_dim
+                self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
+                self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+                self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
+                self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
 
+            def forward(self, X):
+                z1 = self.in_lay(X)
+                # a1=nn.Sigmoid(z1)
+                a1 = F.leaky_relu(z1)
+                z2 = self.hid_lay(a1)
+                a2 = F.leaky_relu(z2)
+                z3 = self.hid_lay_2(a2)
+                a3 = F.leaky_relu(z3)
+                z4 = self.out_lay(a3)
+                out = torch.tanh(z4)
+
+                return out
+
+        self.net = NN(self.in_dim, self.h_dim, self.out_dim)
         # evaluation standards
         self.criterion = nn.MSELoss()  # class initialization
 
@@ -177,19 +197,11 @@ class NeuralNetworkDemo():
 
     def forward(self, X):
         """
-            more flexible
+            more flexible and efficient than Sequential()
         :param X:
         :return:
         """
-        z1 = self.in_lay(X)
-        # a1=nn.Sigmoid(z1)
-        a1 = F.leaky_relu(z1)
-        z2 = self.hid_lay(a1)
-        a2 = F.leaky_relu(z2)
-        z3 = self.hid_lay_2(a2)
-        a3 = F.leaky_relu(z3)
-        z4 = self.out_lay(a3)
-        out = F.tanh(z4)
+        out = self.net.forward(X)
 
         return out
 
@@ -218,7 +230,8 @@ class NeuralNetworkDemo():
                 b_y = b_y.view(b_y.shape[0], 1).float()
 
                 self.optim.zero_grad()
-                b_y_preds = self.forward(b_x)
+                # b_y_preds = self.forward(b_x)
+                b_y_preds = self.forward_sequential(b_x)
                 loss = self.criterion(b_y_preds, b_y)
                 lr = self.optim.param_groups[0]['lr']
                 loss.backward()
