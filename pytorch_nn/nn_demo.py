@@ -111,7 +111,7 @@ class PrintLayer(nn.Module):
 
     def forward(self, x):
         # Do your print / debug stuff here
-        print('print_%dth_layer (batch_size x out_dim)=%s' % (self.idx_layer, x.shape))
+        print('print_%sth_layer (batch_size x out_dim)=%s' % (self.idx_layer, x.shape))
         return x
 
 
@@ -134,7 +134,17 @@ class NeuralNetworkDemo():
         hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
         hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
         out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
-        self.net = nn.Sequential(in_lay,
+        # self.net = nn.Sequential(
+        #                          in_lay,
+        #                          nn.Sigmoid(),
+        #                          hid_lay,
+        #                          nn.LeakyReLU(),
+        #                          hid_lay_2,
+        #                          nn.LeakyReLU(),
+        #                          out_lay
+        #                          )
+        self.net = nn.Sequential(PrintLayer(idx_layer=0),  # Add Print layer for debug
+                                 in_lay,
                                  PrintLayer(idx_layer=1),  # Add Print layer for debug
                                  nn.Sigmoid(),
                                  hid_lay,
@@ -143,7 +153,9 @@ class NeuralNetworkDemo():
                                  hid_lay_2,
                                  PrintLayer(idx_layer=3),  # Add Print layer for debug
                                  nn.LeakyReLU(),
-                                 out_lay)
+                                 out_lay,
+                                 PrintLayer(idx_layer='out'),  # Add Print layer for debug
+                                 )
 
         # evaluation standards
         self.criterion = nn.MSELoss()  # class initialization
@@ -153,7 +165,7 @@ class NeuralNetworkDemo():
 
         # print network architecture
         print_network('demo', self.net)
-        # print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
+        print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
 
     def forward(self, X):
         o1 = self.net(X)
@@ -244,7 +256,7 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
     :param output_file:
     :return:
     """
-    num_figs = len(net) // 2 + 1  # number of layers in nn
+    num_figs = len(all_params_order_dict[0]) // 2 + 1  # number of layers in nn
     fig, axes = plt.subplots(nrows=num_figs, ncols=2)  # create fig and add subplots (axes) into it.
     ax_lst = []
 
@@ -298,9 +310,7 @@ def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
     :param title:
     :return:
     """
-    num_figs = len(net) // 2 + 1
-    print('subplots:(%dx%d):' % (num_figs, num_figs))
-    print(title)
+
     if param_order_dict == {}:
         # for idx, param in enumerate(self.net.parameters()):
         for name, param in net.named_parameters():
@@ -310,6 +320,9 @@ def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
             else:
                 print('error:', name)
 
+    num_figs = len(param_order_dict.keys()) // 2 + 1
+    print('subplots:(%dx%d):' % (num_figs, num_figs))
+    print(title)
     fig, axes = plt.subplots(nrows=num_figs, ncols=2)
     fontsize = 10
     # plt.suptitle(title, fontsize=8)
