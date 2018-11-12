@@ -3,7 +3,13 @@ r"""
     display data
 """
 
+import matplotlib.animation as manimation
+# matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.animation import FuncAnimation
+
+from utilities.load_data import load_data
 
 
 def plot_hierarchy(X, y):
@@ -44,69 +50,6 @@ def plot_hierarchy_2(X,y,title='demo'):
 
 def test_plot_hierarchy():
     plot_hierarchy()
-
-
-def drip_drop_demo():
-    """
-        simulate drip drop
-    :return:
-    """
-    global position, color, size
-
-    # New figure with white background
-    fig = plt.figure(figsize=(6, 6), facecolor='white')
-
-    # New axis over the whole figure, no frame and a 1:1 aspect ratio
-    ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1)
-
-    num = 50
-    size_max = 20 * 20
-    size_min = 20
-
-    # Ring position
-    position = np.random.uniform(0, 1, (num, 2))
-
-    # Ring colors
-    color = np.ones((num, 4)) * (0, 0, 0, 1)
-    # Alpha color channel goes from 0 (transparent) to 1 (opaque)
-    color[:, 3] = np.linspace(0, 1, num)
-
-    # Ring sizes
-    size = np.linspace(size_min, size_max, num)
-
-    # scatter plot
-    scat = ax.scatter(position[:, 0], position[:, 1], s=size, lw=0.5, edgecolors=color, facecolors='None')
-
-    # Ensure limit are [0,1] and remove ticks
-    ax.set_xlim(0, 1), ax.set_xticks([])
-    ax.set_ylim(0, 1), ax.set_yticks([])
-
-    def update(frame):
-        global position, color, size
-        # print(color, size)
-        color[:, 3] = np.maximum(0, color[:, 3] - 1.0 / num)
-        size += (size_max - size_min) / num
-
-        # reset ring
-        i = frame % num
-        position[i] = np.random.uniform(0, 1, 2)
-        size[i] = size_min
-        color[i, 3] = 1
-
-        # update scatter object
-        scat.set_edgecolors(color)
-        scat.set_sizes(size)
-        scat.set_offsets(position)
-
-        # returen the modified object
-        # return scat # TypeError: 'PathCollection' object is not iterable
-        return scat,
-
-    anim = FuncAnimation(fig, update, interval=100, blit=True, frames=200)
-    anim.save('rain.gif', writer='imagemagick', fps=30, dpi=40)
-    anim.save('rain.mp4', writer='ffmpeg', fps=30, dpi=40)
-    plt.show()
-
 
 def live_plot(X, y):
     global idx
@@ -229,6 +172,102 @@ def live_plot_3():
     plt.show()
 
 
+def dynamic_plot(X, y, title='dynamic_plot'):
+    r"""
+        must install ffmpeg (sudo apt-get install ffmpeg), then pip3 install ffmpeg
+
+        Note:
+            pycharm cannot show animation. so it needs to save animation to local file.
+
+    :param input_f:
+    :return:
+    """
+    FFMpegWriter = manimation.writers['ffmpeg']
+    metadata = dict(title='Movie Test', artist='Matplotlib',
+                    comment='Movie support!')
+    writer = FFMpegWriter(fps=15, metadata=metadata)
+
+    fig = plt.figure()
+    plt.title(title)
+    #
+    # def update_figure(X, y):
+    #     # plt.scatter(X, y)
+    #     plt.plot(X,y,'k-o')
+    #     plt.xlim(0,100)
+    #     plt.ylim(0,100)
+
+    with writer.saving(fig, "writer_test.mp4", dpi=100):
+        for k in range(10):
+            # Create a new plot object
+            ax = plt.scatter(X[:k * 2], y[:k * 2])
+            # update_figure(X,y)
+            # ax = plt.plot(X,y)
+            writer.grab_frame()
+
+
+def drip_drop_demo():
+    """
+        simulate drip drop
+    :return:
+    """
+    global position, color, size
+
+    # New figure with white background
+    fig = plt.figure(figsize=(6, 6), facecolor='white')
+
+    # New axis over the whole figure, no frame and a 1:1 aspect ratio
+    ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1)
+
+    num = 50
+    size_max = 20 * 20
+    size_min = 20
+
+    # Ring position
+    position = np.random.uniform(0, 1, (num, 2))
+
+    # Ring colors
+    color = np.ones((num, 4)) * (0, 0, 0, 1)
+    # Alpha color channel goes from 0 (transparent) to 1 (opaque)
+    color[:, 3] = np.linspace(0, 1, num)
+
+    # Ring sizes
+    size = np.linspace(size_min, size_max, num)
+
+    # scatter plot
+    scat = ax.scatter(position[:, 0], position[:, 1], s=size, lw=0.5, edgecolors=color, facecolors='None')
+
+    # Ensure limit are [0,1] and remove ticks
+    ax.set_xlim(0, 1), ax.set_xticks([])
+    ax.set_ylim(0, 1), ax.set_yticks([])
+
+    def update(frame):
+        global position, color, size
+        # print(color, size)
+        color[:, 3] = np.maximum(0, color[:, 3] - 1.0 / num)
+        size += (size_max - size_min) / num
+
+        # reset ring
+        i = frame % num
+        position[i] = np.random.uniform(0, 1, 2)
+        size[i] = size_min
+        color[i, 3] = 1
+
+        # update scatter object
+        scat.set_edgecolors(color)
+        scat.set_sizes(size)
+        scat.set_offsets(position)
+
+        # returen the modified object
+        # return scat # TypeError: 'PathCollection' object is not iterable
+        return scat,
+
+    anim = FuncAnimation(fig, update, interval=100, blit=True, frames=200)
+    anim.save('rain.gif', writer='imagemagick', fps=30, dpi=40)
+    anim.save('rain.mp4', writer='ffmpeg', fps=30, dpi=40)
+    plt.show()
+
+
+
 # from matplotlib import style
 #
 # def dynamic_plot(input_f):
@@ -327,45 +366,7 @@ def live_plot_3():
 
 # from python3.tricks import load_data
 
-import matplotlib.animation as manimation
-# matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
 
-from utilities.load_data import load_data
-
-
-def dynamic_plot(X, y, title='dynamic_plot'):
-    r"""
-        must install ffmpeg (sudo apt-get install ffmpeg), then pip3 install ffmpeg
-
-        Note:
-            pycharm cannot show animation. so it needs to save animation to local file.
-
-    :param input_f:
-    :return:
-    """
-    FFMpegWriter = manimation.writers['ffmpeg']
-    metadata = dict(title='Movie Test', artist='Matplotlib',
-                    comment='Movie support!')
-    writer = FFMpegWriter(fps=15, metadata=metadata)
-
-    fig = plt.figure()
-    plt.title(title)
-    #
-    # def update_figure(X, y):
-    #     # plt.scatter(X, y)
-    #     plt.plot(X,y,'k-o')
-    #     plt.xlim(0,100)
-    #     plt.ylim(0,100)
-
-    with writer.saving(fig, "writer_test.mp4", dpi=100):
-        for k in range(10):
-            # Create a new plot object
-            ax = plt.scatter(X[:k * 2], y[:k * 2])
-            # update_figure(X,y)
-            # ax = plt.plot(X,y)
-            writer.grab_frame()
 
 #
 # import numpy as np
