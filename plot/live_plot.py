@@ -267,6 +267,13 @@ def drip_drop_demo():
     plt.show()
 
 
+def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Frequency'):
+    # x = [21, 22, 23, 4, 5, 6, 77, 8, 9, 10, 31, 32, 33, 34, 35, 36, 37, 18, 49, 50, 100]
+    # num_bins = 5
+    n, bins, patches = plt.hist(x, num_bins, facecolor='blue', alpha=0.5)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(title)
 
 # from matplotlib import style
 #
