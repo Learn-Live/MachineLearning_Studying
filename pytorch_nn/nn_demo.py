@@ -404,4 +404,4 @@ if __name__ == '__main__':
     nn_demo = NeuralNetworkDemo()
     nn_demo.train(train_set)
 
-    # dynamic_plot(input_f="/home/kun/PycharmProjects/MachineLearning_Studying/data/attack_demo.csv")
+    # dynamic_plot(input_f="/home/kun/PycharmProjects/machine_learning_studying/data/attack_demo.csv")
