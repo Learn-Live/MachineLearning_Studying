@@ -104,9 +104,22 @@ def generated_train_set(num):
     return TrafficDataset(X, y, normalization_flg=False)
 
 
-class NerualNetworkDome():
+class PrintLayer(nn.Module):
+    def __init__(self, idx_layer):
+        super(PrintLayer, self).__init__()
+        self.idx_layer = idx_layer
+
+    def forward(self, x):
+        # Do your print / debug stuff here
+        print('print_%dth_layer (batch_size x out_dim)=%s' % (self.idx_layer, x.shape))
+        return x
+
+
+class NeuralNetworkDemo():
     r"""
-        test
+        Visualize neural network parameters
+
+            print the weights and bias values
     """
 
     def __init__(self):
@@ -118,14 +131,17 @@ class NerualNetworkDome():
 
         # network structure
         in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
-        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 20, bias=True)
-        hid_lay_2 = nn.Linear(self.h_dim * 20, self.h_dim * 20, bias=True)
+        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+        hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
         out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
         self.net = nn.Sequential(in_lay,
+                                 PrintLayer(idx_layer=1),  # Add Print layer for debug
                                  nn.Sigmoid(),
                                  hid_lay,
+                                 PrintLayer(idx_layer=2),  # Add Print layer for debug
                                  nn.LeakyReLU(),
                                  hid_lay_2,
+                                 PrintLayer(idx_layer=3),  # Add Print layer for debug
                                  nn.LeakyReLU(),
                                  out_lay)
 
@@ -327,7 +343,7 @@ def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
 
 if __name__ == '__main__':
     train_set = generated_train_set(100)
-    nn_demo = NerualNetworkDome()
+    nn_demo = NeuralNetworkDemo()
     nn_demo.train(train_set)
 
     # dynamic_plot(input_f="/home/kun/PycharmProjects/MachineLearning_Studying/data/attack_demo.csv")
