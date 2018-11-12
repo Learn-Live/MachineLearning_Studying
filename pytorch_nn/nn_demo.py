@@ -143,6 +143,7 @@ class NeuralNetworkDemo():
         #                          nn.LeakyReLU(),
         #                          out_lay
         #                          )
+        # refer to : https://discuss.pytorch.org/t/how-do-i-print-output-of-each-layer-in-sequential/5773/4
         self.net = nn.Sequential(PrintLayer(idx_layer=0),  # Add Print layer for debug
                                  in_lay,
                                  PrintLayer(idx_layer=1),  # Add Print layer for debug
