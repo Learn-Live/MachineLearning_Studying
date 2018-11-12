@@ -201,8 +201,8 @@ class NeuralNetworkDemo():
         :param X:
         :return:
         """
-        out = self.net.forward(X)
-
+        # out = self.net.forward(X)
+        out = self.net(X)
         return out
 
     def forward_sequential(self, X):
@@ -230,8 +230,7 @@ class NeuralNetworkDemo():
                 b_y = b_y.view(b_y.shape[0], 1).float()
 
                 self.optim.zero_grad()
-                # b_y_preds = self.forward(b_x)
-                b_y_preds = self.forward_sequential(b_x)
+                b_y_preds = self.forward(b_x)
                 loss = self.criterion(b_y_preds, b_y)
                 lr = self.optim.param_groups[0]['lr']
                 loss.backward()

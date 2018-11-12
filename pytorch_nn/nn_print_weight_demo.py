@@ -9,11 +9,15 @@ from collections import OrderedDict
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import torch.nn.functional as F
 import torch.utils.data as Data
 from matplotlib.animation import FuncAnimation
 from torch import nn, optim
 from torch.utils.data import Dataset
 
+
+# # matplotlib.use("Agg")
+# import matplotlib.animation as manimation
 
 def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
 
@@ -101,9 +105,22 @@ def generated_train_set(num):
     return TrafficDataset(X, y, normalization_flg=False)
 
 
-class NerualNetworkDome():
+class PrintLayer(nn.Module):
+    def __init__(self, idx_layer):
+        super(PrintLayer, self).__init__()
+        self.idx_layer = idx_layer
+
+    def forward(self, x):
+        # Do your print / debug stuff here
+        print('print_%sth_layer (batch_size x out_dim)=%s' % (self.idx_layer, x.shape))
+        return x
+
+
+class NeuralNetworkDemo():
     r"""
-        test
+        Visualize neural network parameters
+
+            print the weights and bias values
     """
 
     def __init__(self):
@@ -113,19 +130,61 @@ class NerualNetworkDome():
         self.h_dim = 1
         self.out_dim = 1
 
-        # network structure
+        # method 1: network structure (recommend), however it is not easy to print values in each layer
         in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
-        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 20, bias=True)
-        hid_lay_2 = nn.Linear(self.h_dim * 20, self.h_dim * 20, bias=True)
+        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+        hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
         out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
-        self.net = nn.Sequential(in_lay,
+        # self.net = nn.Sequential(
+        #                          in_lay,
+        #                          nn.Sigmoid(),
+        #                          hid_lay,
+        #                          nn.LeakyReLU(),
+        #                          hid_lay_2,
+        #                          nn.LeakyReLU(),
+        #                          out_lay
+        #                          )
+        # refer to : https://discuss.pytorch.org/t/how-do-i-print-output-of-each-layer-in-sequential/5773/4
+        self.net = nn.Sequential(PrintLayer(idx_layer=0),  # Add Print layer for debug
+                                 in_lay,
+                                 PrintLayer(idx_layer=1),  # Add Print layer for debug
                                  nn.Sigmoid(),
                                  hid_lay,
+                                 PrintLayer(idx_layer=2),  # Add Print layer for debug
                                  nn.LeakyReLU(),
                                  hid_lay_2,
+                                 PrintLayer(idx_layer=3),  # Add Print layer for debug
                                  nn.LeakyReLU(),
-                                 out_lay)
+                                 out_lay,
+                                 PrintLayer(idx_layer='out'),  # Add Print layer for debug
+                                 )
 
+        # method 2 : it is not easy to use , however it is easy to print values in each layer.
+        class NN(nn.Module):
+            def __init__(self, in_dim, h_dim, out_dim):
+                super(NN, self).__init__()
+                self.in_dim = in_dim
+                self.h_dim = h_dim
+                self.out_dim = out_dim
+                self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
+                self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+                self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
+                self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
+
+            def forward(self, X):
+                z1 = self.in_lay(X)
+                # a1=nn.Sigmoid(z1)
+                a1 = F.leaky_relu(z1)
+                z2 = self.hid_lay(a1)
+                a2 = F.leaky_relu(z2)
+                z3 = self.hid_lay_2(a2)
+                a3 = F.leaky_relu(z3)
+                z4 = self.out_lay(a3)
+                out = torch.tanh(z4)
+
+                return out
+
+        self.net = NN(self.in_dim, self.h_dim, self.out_dim)
         # evaluation standards
         self.criterion = nn.MSELoss()  # class initialization
 
@@ -134,9 +193,19 @@ class NerualNetworkDome():
 
         # print network architecture
         print_network('demo', self.net)
-        # print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
+        print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
 
     def forward(self, X):
+        """
+            more flexible and efficient than Sequential()
+        :param X:
+        :return:
+        """
+        out = self.net.forward(X)
+
+        return out
+
+    def forward_sequential(self, X):
         o1 = self.net(X)
 
         return o1
@@ -145,27 +214,38 @@ class NerualNetworkDome():
         print('training')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
-        train_loader = Data.DataLoader(train_set, 50, shuffle=True, num_workers=4)
+        self.batch_size = 50
+        train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
-
         ith_layer_out_dict = OrderedDict()
+        learn_rate_lst = []
 
         loss_lst = []
         epochs = 10
         for epoch in range(epochs):
             param_order_dict = OrderedDict()
-            for i, (b_x, b_y) in enumerate(train_loader):
+            loss_tmp = torch.Tensor([0.0])
+            for batch_idx, (b_x, b_y) in enumerate(train_loader):
                 b_x = b_x.view([b_x.shape[0], -1]).float()
                 b_y = b_y.view(b_y.shape[0], 1).float()
 
                 self.optim.zero_grad()
-                b_y_preds = self.forward(b_x)
+                # b_y_preds = self.forward(b_x)
+                b_y_preds = self.forward_sequential(b_x)
                 loss = self.criterion(b_y_preds, b_y)
-                print('%d/%d, batch_ith = %d, loss=%f' % (epoch, epochs, i, loss.data))
+                lr = self.optim.param_groups[0]['lr']
                 loss.backward()
                 self.optim.step()
 
-                loss_lst.append(loss.data)
+                # for graphing purposes
+                learn_rate_lst.append(lr)
+                loss_tmp += loss.data
+                # # print the current status of training
+                # if (batch_idx % 100 == 0):
+                #     print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                #         epoch, batch_idx * len(b_x), len(train_loader.dataset),
+                #                100. * batch_idx / len(train_loader), loss.data[0]))
+                print('%d/%d, batch_ith = %d, loss=%f, lr=%s' % (epoch, epochs, batch_idx, loss.data, lr))
                 # for idx, param in enumerate(self.net.parameters()):
                 for name, param in self.net.named_parameters():
                     # print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
@@ -174,6 +254,7 @@ class NerualNetworkDome():
                     else:
                         # param_order_dict[name].append(copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1))))
                         param_order_dict[name] += copy.deepcopy(param.data.numpy())  # numpy arrary
+            loss_lst.append(loss_tmp.data / len(train_loader))
             if epoch not in all_params_order_dict.keys():  # key = epoch, value =param_order_dict
                 # average parameters
                 all_params_order_dict[epoch] = {key: value / len(train_loader) for key, value in
@@ -191,7 +272,7 @@ class NerualNetworkDome():
 
 def plot_data(data, x_label, y_label, title=''):
     r"""
-    
+
     :param data:
     :param x_label:
     :param y_label:
@@ -212,12 +293,16 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
     r"""
         save the change of parameters in each epcoh to .mp4 file
 
+        must install ffmpeg, then pip3 install ffmpeg
+        Note:
+            pycharm cannot show animation. so it needs to save animation to local file.
+
     :param net:  neural network based on pytorch
     :param all_params_order_dict:
     :param output_file:
     :return:
     """
-    num_figs = len(net) // 2 + 1  # number of layers in nn
+    num_figs = len(all_params_order_dict[0]) // 2 + 1  # number of layers in nn
     fig, axes = plt.subplots(nrows=num_figs, ncols=2)  # create fig and add subplots (axes) into it.
     ax_lst = []
 
@@ -230,8 +315,10 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
             if num_bins < 10:
                 num_bins = 10
             print('epoch=%s, key=%s' % (ith_epoch, key))
-            n, bins, patches = ax_i.hist(np.reshape(np.asarray(value, dtype=float), (-1, 1)), num_bins,
-                                         facecolor='blue', alpha=0.5)
+            y_tmp = np.reshape(np.asarray(value, dtype=float), (-1, 1))
+            # n, bins, patches = ax_i.hist(np.reshape(np.asarray(value, dtype=float), (-1, 1)), num_bins,
+            #                              facecolor='blue', alpha=0.5)
+            ax_i.scatter(range(value.size), y_tmp, c=y_tmp, s=2)
             ax_i.set_xlabel('Values', fontsize=fontsize)
             ax_i.set_ylabel('Frequency', fontsize=fontsize)
             # ax_i.set_xticks(range(6))
@@ -261,138 +348,48 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
     plt.show()
 
 
-#
-#
-# def live_plot(X, y):
-#     global idx
-#     step = 10
-#     idx = 0
-#     fig, axes = plt.subplots(nrows=5, ncols=2)  # create fig and add subplots (axes) into it.
-#     ax_lst = []
-#     # X_tmp = []
-#     # y_tmp = []
-#     # for ax_i in axes.flatten():
-#     #     # ax_i.clear()
-#     #     scat_i=ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
-#     #     # line,=ax_i.plot(X, y, animated=True)
-#     #     # ax_i.set_xlabel('weight')
-#     #     # ax_i.set_ylabel('Frequency')
-#     #     # ax_i.set_xlim(-100, 10000)
-#     #     # ax_i.set_ylim(-100, 10000)
-#     #     ax_lst.append(scat_i)
-#
-#     def update(frame_data):
-#         X_tmp, y_tmp, idx = frame_data
-#         print(X_tmp, y_tmp)
-#         for ax_i in axes.flatten():
-#             ax_i.clear()  # clear the previous data, then redraw the new data.
-#             ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
-#             # ax_i.plot(X, y, animated=True)
-#             ax_i.set_xlabel('weight')
-#             ax_i.set_ylabel('Frequency')
-#             ax_i.set_xlim(-100, 10000)
-#             ax_i.set_ylim(-100, 10000)
-#
-#         print('start_idx=%d, %dth frame.' % (idx, idx // step))
-#         fig.suptitle('start_idx=%d, %dth frame.' % (idx, idx // step))
-#
-#         return ax_lst
-#
-#     frames_num = len(y) // step
-#     print('Number of frames:', frames_num)
-#
-#     def new_data():
-#         global idx
-#         for i in range(len(y) // step):
-#             print('len(y)', len(y), idx)
-#             yield X[idx:idx + step], y[idx:idx + step], idx
-#             idx += step
-#
-#     anim = FuncAnimation(fig, update, frames=new_data, repeat=False, interval=2000, blit=False)  # interval : ms
-#     anim.save("dynamic.mp4", writer='ffmpeg', fps=None, dpi=400)
-#     idx = 0
-#     anim.save('dynamic.gif', writer='imagemagick')
-#     plt.show()
-
-
 def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
-    num_figs = len(net) // 2 + 1
-    print('subplots:(%dx%d):' % (num_figs, num_figs))
-    j = 1
-    print(title)
+    r"""
+
+    :param net:
+    :param param_order_dict:
+    :param title:
+    :return:
+    """
+
     if param_order_dict == {}:
         # for idx, param in enumerate(self.net.parameters()):
         for name, param in net.named_parameters():
             print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
             if name not in param_order_dict.keys():
-                param_order_dict[name] = [copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1)))]
+                param_order_dict[name] = copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1)))
             else:
-                param_order_dict[name].append(copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1))))
+                print('error:', name)
 
-    # fig = plt.subplots()
-    # fig.suptitle(title)
-    plt.suptitle(title, fontsize=8)
-    for ith, (name, param) in enumerate(net.named_parameters()):
-        # dynamic_plot(param_order_dict[name])
-        plt.subplot(num_figs, 2, j)
-        print('subplot_%dth' % j)
+    num_figs = len(param_order_dict.keys()) // 2 + 1
+    print('subplots:(%dx%d):' % (num_figs, num_figs))
+    print(title)
+    fig, axes = plt.subplots(nrows=num_figs, ncols=2)
+    fontsize = 10
+    # plt.suptitle(title, fontsize=8)
+    x_label = 'Values'
+    y_label = 'Frequency'
+    for ith, (ax_i, (name, param)) in enumerate(zip(axes.flatten(), net.named_parameters())):
+        # for ith, (name, param) in enumerate(net.named_parameters()):
+        print('subplot_%dth' % (ith + 1))
         num_bins = 10
-        histogram(np.reshape(np.asarray(param_order_dict[name], dtype=float), (-1, 1)), num_bins=num_bins, title=name,
-                  x_label='Values', y_label='Frequency')
-        j += 1
-
-    plt.tight_layout()
-    plt.subplots_adjust(top=0.88)
+        x_tmp = np.reshape(np.asarray(param_order_dict[name], dtype=float), (-1, 1))
+        n, bins, patches = ax_i.hist(x_tmp, num_bins, facecolor='blue', alpha=0.5)
+        ax_i.set_xlabel('Values', fontsize=fontsize)
+        ax_i.set_ylabel('Frequency', fontsize=fontsize)
+        ax_i.set_title('%s:(%s^T)' % (name, param.data.numpy().shape), fontsize=fontsize)  # paramter_name and shape
+    fig.suptitle(title, fontsize=fontsize)
+    fig.tight_layout(rect=[0, 0.03, 1, 0.90])  # rect: tuple (left, bottom, right, top), optional
+    # plt.tight_layout()
+    # plt.subplots_adjust(top=0.88)
     plt.show()
 
 
-def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Frequency'):
-    # x = [21, 22, 23, 4, 5, 6, 77, 8, 9, 10, 31, 32, 33, 34, 35, 36, 37, 18, 49, 50, 100]
-    # num_bins = 5
-    n, bins, patches = plt.hist(x, num_bins, facecolor='blue', alpha=0.5)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    plt.title(title)
-
-
-#
-# # from python3.tricks import load_data
-#
-# # matplotlib.use("Agg")
-# import matplotlib.animation as manimation
-#
-#
-# def dynamic_plot(X, y):
-#     r"""
-#         must install ffmpeg, then pip3 install ffmpeg
-#
-#         Note:
-#             pycharm cannot show animation. so it needs to save animation to local file.
-#
-#     :param input_f:
-#     :return:
-#     """
-#     FFMpegWriter = manimation.writers['ffmpeg']
-#     metadata = dict(title='Movie Test', artist='Matplotlib',
-#                     comment='Movie support!')
-#     writer = FFMpegWriter(fps=15, metadata=metadata)
-#
-#     fig = plt.figure()
-#     #
-#     # def update_figure(X, y):
-#     #     # plt.scatter(X, y)
-#     #     plt.plot(X,y,'k-o')
-#     #     plt.xlim(0,100)
-#     #     plt.ylim(0,100)
-#
-#     with writer.saving(fig, "writer_test.mp4", dpi=100):
-#         for k in range(10):
-#             # Create a new plot object
-#             plt.scatter(range(X), range(y))
-#             # update_figure(X,y)
-#             writer.grab_frame()
-#
-#
 # def show_figures(D_loss, G_loss):
 #     import matplotlib.pyplot as plt
 #     fig, axes=plt.subplots(111)
@@ -402,23 +399,10 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 #     plt.legend(loc='upper right')
 #     plt.title('D\'s loss of real and fake sample.')
 #     plt.show()
-#
-#
-# import matplotlib.pyplot as plt
-# import numpy
-#
-# hl, = plt.plot([], [])
-#
-#
-# def update_line(hl, new_data):
-#     hl.set_xdata(numpy.append(hl.get_xdata(), new_data))
-#     hl.set_ydata(numpy.append(hl.get_ydata(), new_data))
-#     plt.draw()
-
 
 if __name__ == '__main__':
     train_set = generated_train_set(100)
-    nn_demo = NerualNetworkDome()
+    nn_demo = NeuralNetworkDemo()
     nn_demo.train(train_set)
 
     # dynamic_plot(input_f="/home/kun/PycharmProjects/MachineLearning_Studying/data/attack_demo.csv")
