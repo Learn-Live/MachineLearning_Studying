@@ -198,6 +198,36 @@ def live_plot_2(X,y):
     anim.save('dynamic.mp4', writer='ffmpeg', fps=None, dpi=400)
     plt.show()
 
+def live_plot_3():
+    """
+        refer to :
+            https://stackoverflow.com/questions/9867889/matplotlib-scatterplot-removal
+    :return:
+    """
+    fig, ax = plt.subplots()
+    x, y = [], []
+    sc = ax.scatter(x, y)
+    plt.xlim(0, 10)
+    plt.ylim(0, 10)
+
+    def animate(i):
+        # x.append(np.random.rand(1) * 10)
+        x=[np.random.rand(1) * 10 for i in range(10)]
+        y=[np.random.rand(1) * 10 for i in range(10)]
+        # sc.clear()
+        # print(i)
+        ax.clear()
+        ax.scatter(x, y)
+        # if i > 0:
+        #     sc.remove()
+        # sc.set_offsets(np.c_[x, y])
+
+    anim = FuncAnimation(fig, animate,  frames=200, interval=100, repeat=False)
+    anim.save('dynamic.mp4', writer='ffmpeg', fps=None, dpi=400)
+
+    plt.show()
+    plt.show()
+
 
 # from matplotlib import style
 #
@@ -393,6 +423,7 @@ if __name__ == '__main__':
     data = np.asarray(data, dtype=float)
     plot_hierarchy_2(X=data[:,0],y=data[:,1])
     # live_plot(X=data[:, 0], y=data[:, 1])
-    live_plot_2(X=data[:,0],y=data[:,1])
+    # live_plot_2(X=data[:,0],y=data[:,1])
+    live_plot_3()
     # # drip_drop()
     # # dynamic_plot(X=data[:,0],y=data[:,1])
