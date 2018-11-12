@@ -9,6 +9,7 @@ from collections import OrderedDict
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import torch.nn.functional as F
 import torch.utils.data as Data
 from matplotlib.animation import FuncAnimation
 from torch import nn, optim
@@ -129,7 +130,7 @@ class NeuralNetworkDemo():
         self.h_dim = 1
         self.out_dim = 1
 
-        # network structure
+        # method 1: network structure (not recommend)
         in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
         hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
         hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
@@ -158,6 +159,12 @@ class NeuralNetworkDemo():
                                  PrintLayer(idx_layer='out'),  # Add Print layer for debug
                                  )
 
+        # method 2 : recommend
+        self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
+        self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+        self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
+        self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
+
         # evaluation standards
         self.criterion = nn.MSELoss()  # class initialization
 
@@ -169,6 +176,24 @@ class NeuralNetworkDemo():
         print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
 
     def forward(self, X):
+        """
+            more flexible
+        :param X:
+        :return:
+        """
+        z1 = self.in_lay(X)
+        # a1=nn.Sigmoid(z1)
+        a1 = F.leaky_relu(z1)
+        z2 = self.hid_lay(a1)
+        a2 = F.leaky_relu(z2)
+        z3 = self.hid_lay_2(a2)
+        a3 = F.leaky_relu(z3)
+        z4 = self.out_lay(a3)
+        out = F.tanh(z4)
+
+        return out
+
+    def forward_sequential(self, X):
         o1 = self.net(X)
 
         return o1
@@ -177,7 +202,8 @@ class NeuralNetworkDemo():
         print('training')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
-        train_loader = Data.DataLoader(train_set, 50, shuffle=True, num_workers=4)
+        self.batch_size = 50
+        train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
         learn_rate_lst = []
@@ -187,7 +213,7 @@ class NeuralNetworkDemo():
         for epoch in range(epochs):
             param_order_dict = OrderedDict()
             loss_tmp = torch.Tensor([0.0])
-            for i, (b_x, b_y) in enumerate(train_loader):
+            for batch_idx, (b_x, b_y) in enumerate(train_loader):
                 b_x = b_x.view([b_x.shape[0], -1]).float()
                 b_y = b_y.view(b_y.shape[0], 1).float()
 
@@ -195,12 +221,18 @@ class NeuralNetworkDemo():
                 b_y_preds = self.forward(b_x)
                 loss = self.criterion(b_y_preds, b_y)
                 lr = self.optim.param_groups[0]['lr']
-                print('%d/%d, batch_ith = %d, loss=%f, lr=%s' % (epoch, epochs, i, loss.data, lr))
                 loss.backward()
                 self.optim.step()
 
+                # for graphing purposes
                 learn_rate_lst.append(lr)
                 loss_tmp += loss.data
+                # # print the current status of training
+                # if (batch_idx % 100 == 0):
+                #     print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                #         epoch, batch_idx * len(b_x), len(train_loader.dataset),
+                #                100. * batch_idx / len(train_loader), loss.data[0]))
+                print('%d/%d, batch_ith = %d, loss=%f, lr=%s' % (epoch, epochs, batch_idx, loss.data, lr))
                 # for idx, param in enumerate(self.net.parameters()):
                 for name, param in self.net.named_parameters():
                     # print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
