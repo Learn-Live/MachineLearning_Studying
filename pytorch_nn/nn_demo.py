@@ -150,8 +150,8 @@ class NerualNetworkDome():
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
         train_loader = Data.DataLoader(train_set, 50, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
-
         ith_layer_out_dict = OrderedDict()
+        learn_rate_lst = []
 
         loss_lst = []
         epochs = 10
@@ -165,10 +165,12 @@ class NerualNetworkDome():
                 self.optim.zero_grad()
                 b_y_preds = self.forward(b_x)
                 loss = self.criterion(b_y_preds, b_y)
-                print('%d/%d, batch_ith = %d, loss=%f' % (epoch, epochs, i, loss.data))
+                lr = self.optim.param_groups[0]['lr']
+                print('%d/%d, batch_ith = %d, loss=%f, lr=%s' % (epoch, epochs, i, loss.data, lr))
                 loss.backward()
                 self.optim.step()
 
+                learn_rate_lst.append(lr)
                 loss_tmp += loss.data
                 # for idx, param in enumerate(self.net.parameters()):
                 for name, param in self.net.named_parameters():
