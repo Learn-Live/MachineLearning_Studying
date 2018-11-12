@@ -15,6 +15,7 @@ def plot_hierarchy(X, y):
     """
 
     # fig = plt.figure()  # less frquenetly used, it just creates a Figure, with no Axes
+    # fig.add_subplot()   # add Axes to fig.
     fig, axes = plt.subplots(nrows=2, ncols=3)
     ax1, ax2, ax3, ax4, ax5, ax6 = axes.flatten()  # flatten a 2d Numpy array to 1d
     """
@@ -25,6 +26,19 @@ def plot_hierarchy(X, y):
     ax2.scatter(X, y, c=y, cmap='RdYlGn')
     ax2.set_title('demo', fontsize=10)
 
+    plt.show()
+
+def plot_hierarchy_2(X,y,title='demo'):
+
+    # not recommend
+    # fig = plt.figure()
+    # ax=fig.add_subplot(111)
+
+    # recommend to use, plt.subplots() default parameter is (111)
+    fig, ax = plt.subplots()  # combine plt.figure and fig.add_subplots(111)
+    ax.plot(X,y)
+    ax.set_title(title)
+    # ax.set_ylabel()
     plt.show()
 
 
@@ -98,22 +112,32 @@ def live_plot(X, y):
     global idx
     step = 10
     idx = 0
-    fig, axes = plt.subplots(nrows=5, ncols=2)
+    fig, axes = plt.subplots(nrows=5, ncols=2)  # create fig and add subplots (axes) into it.
     ax_lst = []
-    for ax_i in axes.flatten():
-        ax_lst.append(ax_i)
+    # X_tmp = []
+    # y_tmp = []
+    # for ax_i in axes.flatten():
+    #     # ax_i.clear()
+    #     scat_i=ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
+    #     # line,=ax_i.plot(X, y, animated=True)
+    #     # ax_i.set_xlabel('weight')
+    #     # ax_i.set_ylabel('Frequency')
+    #     # ax_i.set_xlim(-100, 10000)
+    #     # ax_i.set_ylim(-100, 10000)
+    #     ax_lst.append(scat_i)
 
     def update(frame_data):
         X_tmp, y_tmp, idx = frame_data
         print(X_tmp, y_tmp)
-        for ax_i in ax_lst:
+        for ax_i in axes.flatten():
             ax_i.clear()  # clear the previous data, then redraw the new data.
-            ax_i.scatter(X_tmp, y_tmp, c=y_tmp)
+            ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
             # ax_i.plot(X, y, animated=True)
             ax_i.set_xlabel('weight')
             ax_i.set_ylabel('Frequency')
             ax_i.set_xlim(-100, 10000)
             ax_i.set_ylim(-100, 10000)
+
         print('start_idx=%d, %dth frame.' % (idx, idx // step))
         fig.suptitle('start_idx=%d, %dth frame.' % (idx, idx // step))
 
@@ -129,12 +153,50 @@ def live_plot(X, y):
             yield X[idx:idx + step], y[idx:idx + step], idx
             idx += step
 
-    anim = FuncAnimation(fig, update, frames=new_data, repeat=False, interval=200, blit=False)  # interval : ms
-    # anim.save('dynamic.mp4', writer='ffmpeg', fps=30, dpi=400)
+    anim = FuncAnimation(fig, update, frames=new_data, repeat=False, interval=2000, blit=False)  # interval : ms
+    anim.save('dynamic.mp4', writer='ffmpeg', fps=None, dpi=400)
+    idx = 0
     anim.save('dynamic.gif', writer='imagemagick')
     plt.show()
 
 
+def live_plot_2(X,y):
+    r"""
+        refer to:
+            https://stackoverflow.com/questions/9401658/how-to-animate-a-scatter-plot
+
+    :param X:
+    :param y:
+    :return:
+    """
+    step = 10
+    numframes = len(y)//step
+    numpoints = 10
+    color_data = np.random.random((numframes, numpoints))
+    # x, y, c = np.random.random((3, numpoints))
+    fig, axes = plt.subplots(nrows=5, ncols=2)  # create fig and add subplots (axes) into it.
+    # scat = plt.scatter(x, y, c=c, s=100)
+
+    def update_plot(i, data, x,y, step, scat):
+        # scat.set_array(data[i])
+        # scat.set_array(x)
+        # scat.set_array(y)
+        for ax_i in axes.flatten():
+            ax_i.clear()
+            scat_i = ax_i.scatter(x[i*step:(i+1)*step], y[i*step:(i+1)*step], c=data[i], s=100)
+            ax_i.set_xlabel('weight')
+            ax_i.set_ylabel('Frequency')
+            ax_i.set_xlim(-100, 10000)
+            ax_i.set_ylim(-100, 10000)
+        print('start_idx=%d, %dth frame.' % (i*step, i))
+        fig.suptitle('start_idx=%d, %dth frame.' % (i*step, i))
+        return scat_i,
+
+
+    anim =FuncAnimation(fig, update_plot, frames=range(numframes),
+                                  fargs=(color_data, X, y, step, ''),repeat=False,blit=True)
+    anim.save('dynamic.mp4', writer='ffmpeg', fps=None, dpi=400)
+    plt.show()
 
 
 # from matplotlib import style
@@ -329,7 +391,8 @@ if __name__ == '__main__':
     input_fil = '../data/attack_demo.csv'
     data = load_data(input_fil)
     data = np.asarray(data, dtype=float)
-    # plot_hierarchy(X=data[:,0],y=data[:,1])
-    live_plot(X=data[:, 0], y=data[:, 1])
-    # drip_drop()
-    # dynamic_plot(X=data[:,0],y=data[:,1])
+    plot_hierarchy_2(X=data[:,0],y=data[:,1])
+    # live_plot(X=data[:, 0], y=data[:, 1])
+    live_plot_2(X=data[:,0],y=data[:,1])
+    # # drip_drop()
+    # # dynamic_plot(X=data[:,0],y=data[:,1])
