@@ -298,8 +298,8 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 #     for eachLine in dataArray:
 #         if len(eachLine) > 1:
 #             x, y = eachLine.split(',')[0:2]
-#             xar.append(int(x))
-#             yar.append(int(y))
+#             xar.append(variables_n_data_types(x))
+#             yar.append(variables_n_data_types(y))
 #     ax1.clear()
 #     ax1.plot(xar, yar)
 #
