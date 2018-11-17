@@ -190,7 +190,7 @@ class NeuralNetworkDemo():
 
         # optimizer
         self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
-
+        print(callable(self.optim))
         # print network architecture
         print_network('demo', self.net)
         print_net_parameters(self.net, OrderedDict(), title='Initialization parameters')
