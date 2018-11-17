@@ -57,7 +57,7 @@ class TrafficDataset(Dataset):
             #     for i in range(self.X.shape[0]):
             #         # print('i', i.data.tolist())
             #         tmp = [str(j) for j in self.X[i]]
-            #         fid_out.write(','.join(tmp) + ',' + str(int(self.y[i])) + '\n')
+            #         fid_out.write(','.join(tmp) + ',' + str(variables_n_data_types(self.y[i])) + '\n')
 
         self.transform = transform
 
