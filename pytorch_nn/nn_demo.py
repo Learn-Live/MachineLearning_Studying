@@ -389,6 +389,8 @@ def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
     plt.show()
 
 
+# TODO list : plot func.
+
 # def show_figures(D_loss, G_loss):
 #     import matplotlib.pyplot as plt
 #     fig, axes=plt.subplots(111)
