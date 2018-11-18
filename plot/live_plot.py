@@ -41,7 +41,7 @@ def plot_hierarchy_2(X,y,title='demo'):
     # ax=fig.add_subplot(111)
 
     # recommend to use, plt.subplots() default parameter is (111)
-    fig, ax = plt.subplots()  # combine plt.figure and fig.add_subplots(111)
+    fig, ax = plt.subplots()  # combine figure and fig.add_subplots(111)
     ax.plot(X,y)
     ax.set_title(title)
     # ax.set_ylabel()
