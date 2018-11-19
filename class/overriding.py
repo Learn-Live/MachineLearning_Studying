@@ -1,3 +1,15 @@
+r"""
+    https://www.programcreek.com/2009/02/overriding-and-overloading-in-java-with-examples/
+
+    overriding:
+        same method name and same parameter
+        e.g. add() - > add()  : for example (from the Latin exempli gratia )
+
+    overloading:
+        same method name and different parameter
+        e.g. add() -> add(a, b)
+"""
+
 class Animals:
 
     def eat(self):

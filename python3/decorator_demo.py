@@ -20,3 +20,4 @@ def this_is_a_function(parameter):
 
 whatever.this_is_a_function = prefix_function(
     whatever.this_is_a_function, this_is_a_function)
+
