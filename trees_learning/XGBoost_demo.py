@@ -1,3 +1,8 @@
+# -*- coding;utf-8 -*-
+r"""
+    using XGBoost to fit and evaluate
+"""
+
 # -*_ coding: utf-8 -*-
 r"""
     neural network by sklearn
@@ -5,8 +10,6 @@ r"""
 import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
-from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
 from utilities.load_data import load_data, split_features_labels
@@ -16,8 +19,8 @@ class NN(object):
 
     def __init__(self, input_file=''):
         self.dataset = load_data(input_file)
-        self.model = MLPClassifier(max_iter=2000)
-        self.model = DecisionTreeClassifier()
+        # self.model = MLPClassifier(max_iter=2000)
+        # self.model= DecisionTreeClassifier()
         self.model = XGBClassifier(n_estimators=1000, max_depth=100, learning_rate=0.01)
 
     def train(self, train_data):
