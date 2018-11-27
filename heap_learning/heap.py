@@ -1,10 +1,10 @@
 # -*- coding:utf-8 -*-
 """
-    using heap.
+    using heap_learning.
 """
 
 
-# heapq.heappush(heap,item)
+# heapq.heappush(heap_learning,item)
 
 class Heap():
 
@@ -30,7 +30,7 @@ class Heap():
         return heap_m
 
     def adjust_heap(self, heap_m):
-        # find v, then from bottom to up to adjust heap
+        # find v, then from bottom to up to adjust heap_learning
         pass
 
     def max_heap(self, lst, idx):

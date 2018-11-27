@@ -3,6 +3,7 @@ r"""
     tool for load data from local files
 """
 
+import numpy as np
 
 def load_data(input_fil=''):
     """
@@ -29,3 +30,11 @@ def load_data(input_fil=''):
     print('body')
 
     return data
+
+
+def split_features_labels(data, data_type=float):
+    data = np.asarray(data, dtype=data_type)
+    X = data[:, :-1]
+    y = data[:, -1]
+
+    return X, y

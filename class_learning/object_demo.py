@@ -1,15 +1,15 @@
 r"""
-    # https://amir.rachum.com/blog/2016/10/03/understanding-python-class-instantiation/
+    # https://amir.rachum.com/blog/2016/10/03/understanding-python-class_learning-instantiation/
 
     Classes, functions, methods and instances are all objects and whenever you put parentheses after their name,
     you invoke their __call__ method.
 
 
-    So Foo(1, y=2) is equivalent to Foo.__call__(1, y=2). That __call__ is the one defined by Foo’s class. What is Foo’s class?
+    So Foo(1, y=2) is equivalent to Foo.__call__(1, y=2). That __call__ is the one defined by Foo’s class_learning. What is Foo’s class_learning?
 """
 
 
-# If we ignore error checking for a minute, then for regular class instantiation this is roughly equivalent to:
+# If we ignore error checking for a minute, then for regular class_learning instantiation this is roughly equivalent to:
 
 def __call__(obj_type, *args, **kwargs):
     obj = obj_type.__new__(*args, **kwargs)

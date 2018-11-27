@@ -15,7 +15,7 @@ from utilities.load_data import load_data
 def plot_hierarchy(X, y):
     r"""
         Matplotlib Object Hierarchy
-            Figure->(multiple)Axes-> indiviual plot -> trick marks, line, legends, ..
+            Figure->(multiple)Axes-> indiviual plot_learning -> trick marks, line, legends, ..
 
     :return:
     """
@@ -25,7 +25,7 @@ def plot_hierarchy(X, y):
     fig, axes = plt.subplots(nrows=2, ncols=3)
     ax1, ax2, ax3, ax4, ax5, ax6 = axes.flatten()  # flatten a 2d Numpy array to 1d
     """
-        when we call plot(), matplotlib calls gca() to get the current axes and gca in turn calls gcf() to get 
+        when we call plot_learning(), matplotlib calls gca() to get the current axes and gca in turn calls gcf() to get 
         the current figure. If there is none it calls figures() to make one, strictly speaking, to make a subplot(1,1,1).
     """
     ax1.plot(X, y)
@@ -62,7 +62,7 @@ def live_plot(X, y):
     # for ax_i in axes.flatten():
     #     # ax_i.clear()
     #     scat_i=ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
-    #     # line,=ax_i.plot(X, y, animated=True)
+    #     # line,=ax_i.plot_learning(X, y, animated=True)
     #     # ax_i.set_xlabel('weight')
     #     # ax_i.set_ylabel('Frequency')
     #     # ax_i.set_xlim(-100, 10000)
@@ -75,7 +75,7 @@ def live_plot(X, y):
         for ax_i in axes.flatten():
             ax_i.clear()  # clear the previous data, then redraw the new data.
             ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
-            # ax_i.plot(X, y, animated=True)
+            # ax_i.plot_learning(X, y, animated=True)
             ax_i.set_xlabel('weight')
             ax_i.set_ylabel('Frequency')
             ax_i.set_xlim(-100, 10000)
@@ -106,7 +106,7 @@ def live_plot(X, y):
 def live_plot_2(X,y):
     r"""
         refer to:
-            https://stackoverflow.com/questions/9401658/how-to-animate-a-scatter-plot
+            https://stackoverflow.com/questions/9401658/how-to-animate-a-scatter-plot_learning
 
     :param X:
     :param y:
@@ -192,16 +192,16 @@ def dynamic_plot(X, y, title='dynamic_plot'):
     #
     # def update_figure(X, y):
     #     # plt.scatter(X, y)
-    #     plt.plot(X,y,'k-o')
+    #     plt.plot_learning(X,y,'k-o')
     #     plt.xlim(0,100)
     #     plt.ylim(0,100)
 
     with writer.saving(fig, "writer_test.mp4", dpi=100):
         for k in range(10):
-            # Create a new plot object
+            # Create a new plot_learning object
             ax = plt.scatter(X[:k * 2], y[:k * 2])
             # update_figure(X,y)
-            # ax = plt.plot(X,y)
+            # ax = plt.plot_learning(X,y)
             writer.grab_frame()
 
 
@@ -233,7 +233,7 @@ def drip_drop_demo():
     # Ring sizes
     size = np.linspace(size_min, size_max, num)
 
-    # scatter plot
+    # scatter plot_learning
     scat = ax.scatter(position[:, 0], position[:, 1], s=size, lw=0.5, edgecolors=color, facecolors='None')
 
     # Ensure limit are [0,1] and remove ticks
@@ -298,10 +298,10 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 #     for eachLine in dataArray:
 #         if len(eachLine) > 1:
 #             x, y = eachLine.split(',')[0:2]
-#             xar.append(variables_n_data_types(x))
-#             yar.append(variables_n_data_types(y))
+#             xar.append(variables_n_data_types_learning(x))
+#             yar.append(variables_n_data_types_learning(y))
 #     ax1.clear()
-#     ax1.plot(xar, yar)
+#     ax1.plot_learning(xar, yar)
 #
 # anim = animation.FuncAnimation(fig, animate, interval=50, blit=True)
 # plt.show()
@@ -324,7 +324,7 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 # axes = plt.gca()
 # axes.set_xlim(0, 100)
 # axes.set_ylim(-50, +50)
-# line, = axes.plot(xdata, ydata, 'r-')
+# line, = axes.plot_learning(xdata, ydata, 'r-')
 #
 # for i in range(100):
 #     xdata.append(i)
@@ -346,7 +346,7 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 #
 # fig, ax = plt.subplots()
 # xdata, ydata = [], []
-# ln, = plt.plot([], [], 'ro', animated=True)
+# ln, = plt.plot_learning([], [], 'ro', animated=True)
 #
 # def init():
 #     ax.set_xlim(0, 2*np.pi)
@@ -371,7 +371,7 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 #         update_figure(n)
 #         moviewriter.grab_frame()
 
-# from python3.tricks import load_data
+# from python3_learning.tricks import load_data
 
 
 
@@ -398,7 +398,7 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 #     return line,
 #
 # fig, ax = plt.subplots()
-# line, = ax.plot([], [], lw=2)
+# line, = ax.plot_learning([], [], lw=2)
 # ax.grid()
 # xdata, ydata = [], []
 #

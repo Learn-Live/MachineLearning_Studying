@@ -57,7 +57,7 @@ class TrafficDataset(Dataset):
             #     for i in range(self.X.shape[0]):
             #         # print('i', i.data.tolist())
             #         tmp = [str(j) for j in self.X[i]]
-            #         fid_out.write(','.join(tmp) + ',' + str(variables_n_data_types(self.y[i])) + '\n')
+            #         fid_out.write(','.join(tmp) + ',' + str(variables_n_data_types_learning(self.y[i])) + '\n')
 
         self.transform = transform
 
@@ -131,7 +131,7 @@ class NeuralNetworkDemo():
         self.out_dim = 1
 
         # method 1: network structure (recommend), however it is not easy to print values in each layer
-        in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
+        in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_learning initialization
         hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
         hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
         out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
@@ -166,7 +166,7 @@ class NeuralNetworkDemo():
                 self.in_dim = in_dim
                 self.h_dim = h_dim
                 self.out_dim = out_dim
-                self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class initialization
+                self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_learning initialization
                 self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
                 self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
                 self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
@@ -186,7 +186,7 @@ class NeuralNetworkDemo():
 
         self.net = NN(self.in_dim, self.h_dim, self.out_dim)
         # evaluation standards
-        self.criterion = nn.MSELoss()  # class initialization
+        self.criterion = nn.MSELoss()  # class_learning initialization
 
         # optimizer
         self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
@@ -394,8 +394,8 @@ def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
 #     import matplotlib.pyplot as plt
 #     fig, axes=plt.subplots(111)
 #
-#     plt.plot(D_loss, 'r', alpha=0.5, label='D_loss of real and fake sample')
-#     plt.plot(G_loss, 'g', alpha=0.5, label='D_loss of G generated fake sample')
+#     plt.plot_learning(D_loss, 'r', alpha=0.5, label='D_loss of real and fake sample')
+#     plt.plot_learning(G_loss, 'g', alpha=0.5, label='D_loss of G generated fake sample')
 #     plt.legend(loc='upper right')
 #     plt.title('D\'s loss of real and fake sample.')
 #     plt.show()

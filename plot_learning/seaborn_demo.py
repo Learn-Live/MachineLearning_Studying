@@ -18,7 +18,7 @@ def plot_seaborn():
 
     fig, ax = plt.subplots(nrows=1, ncols=2)
     print(ax)
-    ax = sns.lineplot(x, y, ax=ax[0])  # if ax is None,  ax = plt.gca(),     p.plot(ax, kwargs)
+    ax = sns.lineplot(x, y, ax=ax[0])  # if ax is None,  ax = plt.gca(),     p.plot_learning(ax, kwargs)
     # plt.xtricks(rotation=90)
     plt.show()
 
