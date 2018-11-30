@@ -55,7 +55,7 @@ class TrafficDataset(Dataset):
             self.X = normalize_data(np.asarray(self.X, dtype=float), range_value=[-1, 1], eps=1e-5)
             # with open(input_file + '_normalized.csv', 'w') as fid_out:
             #     for i in range(self.X.shape[0]):
-            #         # print('i', i.data.tolist())
+            #         # print('i', i.input_data.tolist())
             #         tmp = [str(j) for j in self.X[i]]
             #         fid_out.write(','.join(tmp) + ',' + str(variables_n_data_types_learning(self.y[i])) + '\n')
 
@@ -243,7 +243,7 @@ class NeuralNetworkDemo():
                 # if (batch_idx % 100 == 0):
                 #     print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 #         epoch, batch_idx * len(b_x), len(train_loader.dataset),
-                #                100. * batch_idx / len(train_loader), loss.data[0]))
+                #                100. * batch_idx / len(train_loader), loss.input_data[0]))
                 print('%d/%d, batch_ith = %d, loss=%f, lr=%s' % (epoch, epochs, batch_idx, loss.data, lr))
                 # for idx, param in enumerate(self.net.parameters()):
                 for name, param in self.net.named_parameters():
@@ -251,7 +251,7 @@ class NeuralNetworkDemo():
                     if name not in param_order_dict.keys():
                         param_order_dict[name] = copy.deepcopy(param.data.numpy())  # numpy arrary
                     else:
-                        # param_order_dict[name].append(copy.deepcopy(np.reshape(param.data.numpy(), (-1, 1))))
+                        # param_order_dict[name].append(copy.deepcopy(np.reshape(param.input_data.numpy(), (-1, 1))))
                         param_order_dict[name] += copy.deepcopy(param.data.numpy())  # numpy arrary
             loss_lst.append(loss_tmp.data / len(train_loader))
             if epoch not in all_params_order_dict.keys():  # key = epoch, value =param_order_dict
@@ -309,7 +309,7 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
         ith_epoch, ith_param_order_dict = frame_data  # dictionary
         fontsize = 7
         for ax_i, (key, value) in zip(axes.flatten(), ith_param_order_dict.items()):
-            ax_i.clear()  # clear the previous data, then redraw the new data.
+            ax_i.clear()  # clear the previous input_data, then redraw the new input_data.
             num_bins = value.size // 2
             if num_bins < 10:
                 num_bins = 10
@@ -406,4 +406,4 @@ if __name__ == '__main__':
     nn_demo = NeuralNetworkDemo()
     nn_demo.train(train_set)
 
-    # dynamic_plot(input_f="/home/kun/PycharmProjects/learning_practice_problems/data/attack_demo.csv")
+    # dynamic_plot(input_f="/home/kun/PycharmProjects/learning_practice_problems/input_data/attack_demo.csv")

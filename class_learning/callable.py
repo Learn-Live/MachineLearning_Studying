@@ -25,7 +25,7 @@ def main():
     print(callable(func))
     print(type(func))
     print(func.__call__)
-    let = func  # python's functions are first-class_learning objects. you can assign them to variable, store them in data structures,
+    let = func  # python's functions are first-class_learning objects. you can assign them to variable, store them in input_data structures,
     # pass them as arguments to other functions, and even return them as values from other functions
     print(callable(let))
     let('hi')

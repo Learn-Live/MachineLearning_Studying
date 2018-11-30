@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 r"""
-    display data
+    display input_data
 """
 
 import matplotlib.animation as manimation
@@ -73,7 +73,7 @@ def live_plot(X, y):
         X_tmp, y_tmp, idx = frame_data
         print(X_tmp, y_tmp)
         for ax_i in axes.flatten():
-            ax_i.clear()  # clear the previous data, then redraw the new data.
+            ax_i.clear()  # clear the previous input_data, then redraw the new input_data.
             ax_i.scatter(X_tmp, y_tmp, c=y_tmp, s=10)
             # ax_i.plot_learning(X, y, animated=True)
             ax_i.set_xlabel('weight')
@@ -121,7 +121,7 @@ def live_plot_2(X,y):
     # scat = plt.scatter(x, y, c=c, s=100)
 
     def update_plot(i, data, x,y, step, scat):
-        # scat.set_array(data[i])
+        # scat.set_array(input_data[i])
         # scat.set_array(x)
         # scat.set_array(y)
         for ax_i in axes.flatten():
@@ -290,8 +290,8 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 # ax1 = fig.add_subplot(1,1,1)
 #
 # def animate(i):
-#     pullData = open(r'../data/attack_demo.csv', "r").read()
-#     # pullData = open('../data/samples.csv', "r").read()
+#     pullData = open(r'../input_data/attack_demo.csv', "r").read()
+#     # pullData = open('../input_data/samples.csv', "r").read()
 #     dataArray = pullData.split('\n')
 #     xar = []
 #     yar = []
@@ -403,9 +403,9 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 # xdata, ydata = [], []
 #
 #
-# def run(data):
-#     # update the data
-#     t, y = data
+# def run(input_data):
+#     # update the input_data
+#     t, y = input_data
 #     xdata.append(t)
 #     print(len(xdata))
 #     ydata.append(y)
@@ -426,12 +426,12 @@ def histogram(x, num_bins=5, title='histogram', x_label='Values.', y_label='Freq
 # plt.show()
 
 if __name__ == '__main__':
-    input_fil = '../data/attack_demo.csv'
+    input_fil = '../input_data/attack_demo.csv'
     data = load_data(input_fil)
     data = np.asarray(data, dtype=float)
     plot_hierarchy_2(X=data[:,0],y=data[:,1])
-    # live_plot(X=data[:, 0], y=data[:, 1])
-    # live_plot_2(X=data[:,0],y=data[:,1])
+    # live_plot(X=input_data[:, 0], y=input_data[:, 1])
+    # live_plot_2(X=input_data[:,0],y=input_data[:,1])
     live_plot_3()
     # # drip_drop()
-    # # dynamic_plot(X=data[:,0],y=data[:,1])
+    # # dynamic_plot(X=input_data[:,0],y=input_data[:,1])

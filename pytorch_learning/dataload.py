@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 r"""
-    learning data loader in pytorch 0.4.1
+    learning input_data loader in pytorch 0.4.1
 """
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
@@ -30,4 +30,4 @@ def main(input_file):
 
 
 if __name__ == '__main__':
-    main(input_file='../data/samples.csv')
+    main(input_file='../input_data/samples.csv')

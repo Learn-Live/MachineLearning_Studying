@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 r"""
-    tool for load data from local files
+    tool for load input_data from local files
 """
 
 import numpy as np

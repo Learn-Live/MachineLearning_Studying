@@ -39,7 +39,7 @@ class NN(object):
 
 
 def main():
-    input_file = '../data/iris.csv'
+    input_file = '../input_data/iris.csv'
     data = load_data(input_file)
     X, y = split_features_labels(data)
     y = np.asarray(y, dtype=int)

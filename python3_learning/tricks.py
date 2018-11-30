@@ -32,4 +32,4 @@ def load_data(in_f=''):
 
 if __name__ == '__main__':
     # lst_enurmate(in_lst=[3,2,1,4])
-    load_data(in_f='../data/attack_demo.csv')
+    load_data(in_f='../input_data/attack_demo.csv')
