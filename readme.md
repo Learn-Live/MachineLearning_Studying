@@ -4,11 +4,11 @@
    > 3) sklearn > 0.20
    ...
    
-# learning from scratch
+# Learning from scratch
 "Reading  and Learning are far from enough for you to understand everything, you'd better to implement it by 
 your hands from scratch."
  
-In this repository I will write down the issues what I met in learning and implementing.
+In this repository (learning-practice-problems(lpp)) I will write down the issues what I met in learning and implementing.
 
 <!-- All the source codes are based on python version after python3.6.x --> 
 
