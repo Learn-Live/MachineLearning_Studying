@@ -12,7 +12,7 @@ from xgboost import XGBClassifier
 from utilities.load_data import load_data, split_features_labels
 
 
-# from ..rl_learning import *
+# from ..rl_issues import *
 
 
 class NN(object):

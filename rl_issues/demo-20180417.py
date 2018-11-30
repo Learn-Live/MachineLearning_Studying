@@ -10,9 +10,9 @@ import numpy as np
 from keras.layers import Dense, Activation, Flatten
 from keras.models import Sequential
 from keras.optimizers import Adam
-from rl_learning.agents.dqn import DQNAgent
-from rl_learning.memory import SequentialMemory
-from rl_learning.policy import EpsGreedyQPolicy
+from rl_issues.agents.dqn import DQNAgent
+from rl_issues.memory import SequentialMemory
+from rl_issues.policy import EpsGreedyQPolicy
 
 ENV_NAME = 'CartPole-v0'
 
