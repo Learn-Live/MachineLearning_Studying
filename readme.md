@@ -12,13 +12,26 @@ In this repository (learning-practice-problems(lpp)) I will write down the issue
 
 <!-- All the source codes are based on python version after python3.6.x --> 
 
+- input_data
+- utilities: load, preprocess, save, ...  
+
+<!-- sep -->    
 - python3
+- data_structure_lpp
 - pytorch
-- plot_data
 - sklearn
+
+<!--sep -->    
+- plot_data
+- output_data
+
+<!-- sep -->    
 - markdown
-- utilities
+
+<!-- sep -->    
 - words_root
+
+<!-- sep -->    
 - latex
 
 ...
