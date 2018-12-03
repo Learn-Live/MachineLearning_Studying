@@ -56,6 +56,7 @@ import time
 #
 #     return wrapper
 
+# TODO: the result is not right.
 
 def calculate_time_decorator(func, message='mess'):
     def new_func(*args, **kwargs):
@@ -78,5 +79,6 @@ def process_data(x, y):
 
 if __name__ == '__main__':
     # process_data(10,1)
-    foo = calculate_time_decorator(process_data, 'process_data')
-    foo(10, 1)
+    # foo = calculate_time_decorator(process_data, 'process_data')
+    # foo(10, 1)
+    process_data(10, 1, 'abc')
