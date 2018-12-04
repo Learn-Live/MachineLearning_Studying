@@ -168,7 +168,8 @@ class NeuralNetworkDemo():
                 self.out_dim = out_dim
                 self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
                 self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
-                self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
+                # self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
+                self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=True)
                 self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
 
             def forward(self, X):
@@ -221,7 +222,7 @@ class NeuralNetworkDemo():
         learn_rate_lst = []
 
         loss_lst = []
-        epochs = 10
+        epochs = 100
         for epoch in range(epochs):
             param_order_dict = OrderedDict()
             loss_tmp = torch.Tensor([0.0])
@@ -309,8 +310,10 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
     def update(frame_data):
         ith_epoch, ith_param_order_dict = frame_data  # dictionary
         fontsize = 7
+        epsilon = 10e-4
         for ax_i, (key, value) in zip(axes.flatten(), ith_param_order_dict.items()):
             ax_i.clear()  # clear the previous input_data, then redraw the new input_data.
+            # ax_i.figure(figsize=(18, 18))
             num_bins = value.size // 2
             if num_bins < 10:
                 num_bins = 10
@@ -318,7 +321,29 @@ def live_plot_params(net, all_params_order_dict, output_file='dynamic.mp4'):
             y_tmp = np.reshape(np.asarray(value, dtype=float), (-1, 1))
             # n, bins, patches = ax_i.hist(np.reshape(np.asarray(value, dtype=float), (-1, 1)), num_bins,
             #                              facecolor='blue', alpha=0.5)
-            ax_i.scatter(range(value.size), y_tmp, c=y_tmp, s=2)
+            # ax_i.scatter(range(value.size), y_tmp, c=y_tmp, s=2)
+
+            # normalization
+            im_value = np.asarray(value, dtype=float)
+            if len(im_value.shape) == 2:
+                rows_tmp, cols_tmp = im_value.shape
+            else:  # len(im_value.shape) ==1
+                rows_tmp, = im_value.shape
+            im_value = np.reshape(im_value, (rows_tmp, -1))
+            rows_tmp, cols_tmp = im_value.shape
+            print(im_value.shape, rows_tmp, cols_tmp)
+            min_tmp = im_value.min(axis=0)
+            max_tmp = im_value.max(axis=0)
+            print(f"max_tmp:{max_tmp}, min_tmp:{min_tmp}")
+            range_tmp = max_tmp - min_tmp
+            for idx_tmp in range(len(range_tmp)):
+                if range_tmp[idx_tmp] == 0.0:
+                    range_tmp[idx_tmp] = epsilon
+            im_value = (im_value - min_tmp) / range_tmp * 255
+            # ax_i.clear()
+            print(f"im_value:{im_value}")
+            ax_i.imshow(im_value)
+
             ax_i.set_xlabel('Values', fontsize=fontsize)
             ax_i.set_ylabel('Frequency', fontsize=fontsize)
             # ax_i.set_xticks(range(6))
@@ -401,7 +426,7 @@ def print_net_parameters(net, param_order_dict=OrderedDict(), title=''):
 #     plt.show()
 
 if __name__ == '__main__':
-    train_set = generated_train_set(100)
+    train_set = generated_train_set(1000)
     nn_demo = NeuralNetworkDemo()
     nn_demo.train(train_set)
 
