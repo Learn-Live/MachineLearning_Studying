@@ -166,11 +166,11 @@ class NeuralNetworkDemo():
                 self.in_dim = in_dim
                 self.h_dim = h_dim
                 self.out_dim = out_dim
-                self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
-                self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+                self.in_lay = nn.Linear(self.in_dim, self.h_dim * 30, bias=True)  # class_issues initialization
+                self.hid_lay = nn.Linear(self.h_dim * 30, self.h_dim * 20, bias=True)
                 # self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
-                self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=True)
-                self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
+                self.hid_lay_2 = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+                self.out_lay = nn.Linear(self.h_dim * 10, self.out_dim, bias=True)
 
             def forward(self, X):
                 z1 = self.in_lay(X)
