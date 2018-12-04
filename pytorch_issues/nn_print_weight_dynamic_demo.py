@@ -131,10 +131,10 @@ class NeuralNetworkDemo():
         self.out_dim = 1
 
         # method 1: network structure (recommend), however it is not easy to print values in each layer
-        in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
-        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
-        hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
-        out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
+        in_lay = nn.Linear(self.in_dim, self.h_dim * 30, bias=True)  # class_issues initialization
+        hid_lay = nn.Linear(self.h_dim * 30, self.h_dim * 20, bias=True)
+        hid_lay_2 = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=False)
+        out_lay = nn.Linear(self.h_dim * 10, self.out_dim, bias=True)
         # self.net = nn.Sequential(
         #                          in_lay,
         #                          nn.Sigmoid(),
