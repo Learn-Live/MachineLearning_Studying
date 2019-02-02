@@ -56,7 +56,7 @@ in this sense, in this context
 
 the purpose of this survey/investigation/report/review is to ..
 
-therefore/so, moreover., additionally, in addition, conversely.
+therefore/so, moreover., additionally, in addition, conversely, nonetheless, overall
 
 a complete/whole process. a comprehensive review, overview.
 
@@ -97,3 +97,30 @@ in brief, in short.
 it is worth remarking the main difference of this review to other works is that 
 
 its main objective is  to 
+
+this segment overviews the most common validation approaches.
+
+it might offer a great deal of data.
+
+to reveal/ unveil suspicious content in the payload
+
+a tedious task.
+
+intricate commuication protocol.
+
+but this work still fundamentally relies on .. 
+
+experimental evaluation is conducted using a public dataset, yielding encouraging result
+
+the meticulous labeling of network traffic based on the nature of application type characterized an arduous task
+
+a ubiquitous way is 
+
+a law promulgation point of view
+
+the rudimentary protocol.
+
+
+
+
+
