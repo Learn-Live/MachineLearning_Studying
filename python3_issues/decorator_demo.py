@@ -71,7 +71,7 @@ def calculate_time_decorator(func, message='mess'):
 
 
 @calculate_time_decorator
-def process_data(x, y):
+def process_data(x, y, name=''):
     print(f"x:{x}")
 
     return -1

@@ -120,7 +120,59 @@ a law promulgation point of view
 
 the rudimentary protocol.
 
+It isn’t the zingy commercials that cost millions of dollars per slot and feature clydesdales and celebrities, nor is it the halftime shows that are bedazzled with special effects yet still often feel lukewarm. 
 
+We’re talking endless piles of chips, steaming bowls of queso, and probably a mountain of wings if you are lucky.
 
+by tapping into the experts?
 
+get the lowdown on 
 
+To be completely honest
+
+Thankfully, the endives won’t be wilted, even in the 3rd quarter! 
+
+Popcorn seasoned with furikake and a Caviar station (with potato chips, creme fraiche, and chives) may make an appearance.
+
+but there is no shame in buying kielbasa and throwing it on the grill.
+
+the Super Bowl is a fairly new event
+
+I am there for the vibes, food, and beer.  I’m glad it only happens once a year because when those hot wings with blue cheese sauce start to come out of the kitchen I seriously can’t stop eating them. 
+
+The flavour combination is so addictive and unique with the mouth tingling spice and vinegar wings balanced out with the salty, cooling, and savoury blue cheese sauce. Suck them straight off the bone and go for another one; I barely have time to even look up at the screen! 
+
+Patriots touchdowns, wood fired Paella
+
+It’s a fresh option and really simple to make and serve.
+
+While I’m not the world’s biggest fan of football, I am a huge fan of chip and dip! 
+
+it brings Stunning Visuals to a live-action anime adaptation
+
+We've finally, finally reached the era in sci-fi moviemaking where the special effects on screen look exactly as good as their creators want them to be.
+
+To say that James Cameron's Avatar ushered in a new era wouldn't be exactly right 
+
+Hilariously
+
+In the pantheon of popular small-time insurance scams, 
+
+ Schemers have been taking intentional spills in grocery stores, department stores, and wherever else they can shamelessly muster the courage to for time immemorial. 
+
+Security camera footage revealed that he orchestrated the whole ridiculous incident himself. 
+
+in quite a pickle 
+
+A City-Dweller’s Guide to Exploration
+
+A journey of a thousand miles begins with a single click, so start your explorations online. 
+
+For the burgeoning city explorer, a guide is the best way to get your feet wet -- often literally. (Real explorers always bring spare socks.) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
