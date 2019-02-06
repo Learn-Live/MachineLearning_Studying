@@ -7,6 +7,7 @@
 'in' + month.
     E.g., in December
     
+our weekly polling roundup
 
 live up to the hype.
 
@@ -170,6 +171,57 @@ A journey of a thousand miles begins with a single click, so start your explorat
 
 For the burgeoning city explorer, a guide is the best way to get your feet wet -- often literally. (Real explorers always bring spare socks.) 
  
+one teaspoon of almond butter, 
+
+ou can eat like a gluttonous maniac before the big game.
+
+has a bunch of amazing game-day food 
+pre-game coverage.
+
+While those are cooking, pop open a bottle of TJ’s Chunky Salsa and tear open bags of TJ’s Chunky Spicy Guacamole and Organic Three Cheese Blend
+
+with a smidge of salsa and cheese. You’ll look like you heroically prepared tacos for everyone
+
+Kim Jong-Un Demands North Koreans Hand Over Their Poo To Fight The Fertilizer Crisis
+the decree seems entirely untenable. 
+
+North Koreans rally in support of a New Year’s address in Pyongyang, 2019.
+
+purportedly, able-bodied citizen 
+
+Ultimately, the Democratic People’s Republic of Korea seems to be scrounging for solutions. In an economy fraught with sanctions, the government has decided to up the ante, and demand more than ever before from its citizens.
+
+Kim Jong-un’s unsustainable policy is quickly garnering resentment from North Koreans of all stripes. 
+
+Hitler-Owned Book Detailing Plans For North American Holocaust Comes To Light
+
+This item touches a chord with people with the fact 
+
+to wipe the  population from the face of the Earth.
+
+that a darker side came to light.
+
+no matter how good or rotten a guy was to me, I just kind of latched on to him.
+
+is this dine-in or take-out?
+
+Blossoms for him? You betcha’.Here, some time-honored classics, some twists on traditional themes, and some novel, new ideas to make your beloved smile on Valentine’s Day.
+
+Anyone with information regarding her whereabouts is urged to call
+ 
+In an effort to help you avoid limp noodles and bland broths, we’ve rounded up the very best ramen in New York,
+ 
+mass success
+  
+he opened his own ramen-ya, a hidden gem right beside the Williamsburg Bridge.
+
+With the 2020 election cycle revving into full gear, 
+
+in no particular order.
+
+If one really whets your appetite, click on the chart and you’ll be brought to the story from which it sprang.
+
+
  
  
  
