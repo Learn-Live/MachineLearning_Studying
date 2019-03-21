@@ -7,6 +7,7 @@
 'in' + month.
     E.g., in December
     
+our weekly polling roundup
 
 live up to the hype.
 
@@ -120,7 +121,110 @@ a law promulgation point of view
 
 the rudimentary protocol.
 
+It isn’t the zingy commercials that cost millions of dollars per slot and feature clydesdales and celebrities, nor is it the halftime shows that are bedazzled with special effects yet still often feel lukewarm. 
+
+We’re talking endless piles of chips, steaming bowls of queso, and probably a mountain of wings if you are lucky.
+
+by tapping into the experts?
+
+get the lowdown on 
+
+To be completely honest
+
+Thankfully, the endives won’t be wilted, even in the 3rd quarter! 
+
+Popcorn seasoned with furikake and a Caviar station (with potato chips, creme fraiche, and chives) may make an appearance.
+
+but there is no shame in buying kielbasa and throwing it on the grill.
+
+the Super Bowl is a fairly new event
+
+I am there for the vibes, food, and beer.  I’m glad it only happens once a year because when those hot wings with blue cheese sauce start to come out of the kitchen I seriously can’t stop eating them. 
+
+The flavour combination is so addictive and unique with the mouth tingling spice and vinegar wings balanced out with the salty, cooling, and savoury blue cheese sauce. Suck them straight off the bone and go for another one; I barely have time to even look up at the screen! 
+
+Patriots touchdowns, wood fired Paella
+
+It’s a fresh option and really simple to make and serve.
+
+While I’m not the world’s biggest fan of football, I am a huge fan of chip and dip! 
+
+it brings Stunning Visuals to a live-action anime adaptation
+
+We've finally, finally reached the era in sci-fi moviemaking where the special effects on screen look exactly as good as their creators want them to be.
+
+To say that James Cameron's Avatar ushered in a new era wouldn't be exactly right 
+
+Hilariously
+
+In the pantheon of popular small-time insurance scams, 
+
+ Schemers have been taking intentional spills in grocery stores, department stores, and wherever else they can shamelessly muster the courage to for time immemorial. 
+
+Security camera footage revealed that he orchestrated the whole ridiculous incident himself. 
+
+in quite a pickle 
+
+A City-Dweller’s Guide to Exploration
+
+A journey of a thousand miles begins with a single click, so start your explorations online. 
+
+For the burgeoning city explorer, a guide is the best way to get your feet wet -- often literally. (Real explorers always bring spare socks.) 
+ 
+one teaspoon of almond butter, 
+
+ou can eat like a gluttonous maniac before the big game.
+
+has a bunch of amazing game-day food 
+pre-game coverage.
+
+While those are cooking, pop open a bottle of TJ’s Chunky Salsa and tear open bags of TJ’s Chunky Spicy Guacamole and Organic Three Cheese Blend
+
+with a smidge of salsa and cheese. You’ll look like you heroically prepared tacos for everyone
+
+Kim Jong-Un Demands North Koreans Hand Over Their Poo To Fight The Fertilizer Crisis
+the decree seems entirely untenable. 
+
+North Koreans rally in support of a New Year’s address in Pyongyang, 2019.
+
+purportedly, able-bodied citizen 
+
+Ultimately, the Democratic People’s Republic of Korea seems to be scrounging for solutions. In an economy fraught with sanctions, the government has decided to up the ante, and demand more than ever before from its citizens.
+
+Kim Jong-un’s unsustainable policy is quickly garnering resentment from North Koreans of all stripes. 
+
+Hitler-Owned Book Detailing Plans For North American Holocaust Comes To Light
+
+This item touches a chord with people with the fact 
+
+to wipe the  population from the face of the Earth.
+
+that a darker side came to light.
+
+no matter how good or rotten a guy was to me, I just kind of latched on to him.
+
+is this dine-in or take-out?
+
+Blossoms for him? You betcha’.Here, some time-honored classics, some twists on traditional themes, and some novel, new ideas to make your beloved smile on Valentine’s Day.
+
+Anyone with information regarding her whereabouts is urged to call
+ 
+In an effort to help you avoid limp noodles and bland broths, we’ve rounded up the very best ramen in New York,
+ 
+mass success
+  
+he opened his own ramen-ya, a hidden gem right beside the Williamsburg Bridge.
+
+With the 2020 election cycle revving into full gear, 
+
+in no particular order.
+
+If one really whets your appetite, click on the chart and you’ll be brought to the story from which it sprang.
 
 
-
-
+ 
+ 
+ 
+ 
+ 
+ 
